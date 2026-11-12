@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수학교육학 핵심 이론 마스터 | Mathematics Education Archive</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans KR & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- KaTeX for crisp mathematical notation -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <!-- Font Awesome for Academic Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        academic: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            200: '#bcccdc',
+                            300: '#9fb3c8',
+                            400: '#829ab1',
+                            500: '#627d98',
+                            600: '#486581',
+                            700: '#334e68',
+                            800: '#243b53',
+                            900: '#102a43',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar & Smooth Transitions */
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        
+        /* Flashcard 3D Flip Effect */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+
+        /* Highlight match in search */
+        mark.search-highlight {
+            background-color: #fef08a;
+            color: #1e293b;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        .dark mark.search-highlight {
+            background-color: #eab308;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 antialiased">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- App Layout Container -->
+    <div class="flex min-h-screen">
+
+        <!-- Left Sidebar Navigation -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+            <!-- Brand Header -->
+            <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
+                        <i class="fa-solid fa-square-root-variable text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base tracking-tight text-slate-900 dark:text-white leading-tight">수학교육학 아카이브</h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Mathematics Education</p>
+                    </div>
+                </div>
+                <button class="lg:hidden text-slate-500 hover:text-slate-700 dark:text-slate-400" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Overall Progress Widget -->
+            <div class="p-4 mx-4 mt-4 rounded-xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                <div class="flex justify-between items-center mb-1.5">
+                    <span class="text-xs font-semibold text-slate-600 dark:text-slate-300">학습 완료 진도율</span>
+                    <span id="progressText" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                    <div id="progressBar" class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between items-center mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                    <span id="completedCountText">0 / 12 주제 완료</span>
+                    <button onclick="resetProgress()" class="hover:text-rose-500 underline transition-colors">초기화</button>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1" id="navMenu">
+                <p class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">핵심 이론 커리큘럼</p>
+                
+                <a href="#sec-1" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    <span class="flex items-center gap-2.5"><span class="w-5 text-center text-xs font-bold text-indigo-500">01</span> 수학교육학의 개관</span>
+                </a>
+                <a href="#sec-2" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    <span class="flex items-center gap-2.5"><span class="w-5 text-center text-xs font-bold text-indigo-500">02</span> 수학교육 심리·학습 이론</span>
+                </a>
+                <a href="#sec-3" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    <span class="flex items-center gap-2.5"><span class="w-5 text-center text-xs font-bold text-indigo-500">03</span> 수학적 사고와 문제해결</span>
+                </a>
+                <a href="#sec-4" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    <span class="flex items-center gap-2.5"><span class="w-5 text-center text-xs font-bold text-indigo-500">04</span> 교수학적 변환 및 원리</span>
+                </a>
+                <a href="#sec-5" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    <span class="flex items-center gap-2.5"><span class="w-5 text-center text-xs font-bold text-indigo-500">05</span> 영역별 수학교육 & 오개념</span>
+                </a>
+                <a href="#sec-6" class="nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    <span class="flex items-center gap-2.5"><span class="w-5 text-center text-xs font-bold text-indigo-500">06</span> 평가 및 공학 도구 활용</span>
+                </a>
+
+                <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
+                    <p class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">인터랙티브 학습 도구</p>
+                    <a href="#interactive-lab" class="nav-item flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50/70 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors">
+                        <i class="fa-solid fa-layer-group w-5 text-center"></i>
+                        <span>플래시카드 & 개념 퀴즈</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                <span>임용·학부 전공 심화 대비</span>
+                <button onclick="toggleDarkMode()" id="themeBtn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="테마 전환">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 lg:pl-72 flex flex-col min-w-0">
+            
+            <!-- Sticky Top Header (Search, Filter, Bookmarks) -->
+            <header class="sticky top-0 z-30 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 sm:px-8 py-3.5">
+                <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 flex-1 min-w-[240px]">
+                        <button class="lg:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" onclick="toggleSidebar()">
+                            <i class="fa-solid fa-bars text-lg"></i>
+                        </button>
+                        <!-- Search Input -->
+                        <div class="relative flex-1 max-w-md">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                            <input type="text" id="searchInput" placeholder="이론가, 개념, 오개념 검색 (예: 스켐프, 반 힐레, 인식론적 장애)..." 
+                                class="w-full pl-10 pr-8 py-2 text-sm bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-900 rounded-xl outline-none transition-all">
+                            <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-circle-xmark text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter & Bookmark Controls -->
+                    <div class="flex items-center gap-2">
+                        <button id="filterBookmarkBtn" onclick="toggleBookmarkFilter()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-amber-400 transition-all">
+                            <i class="fa-regular fa-bookmark text-amber-500" id="bookmarkFilterIcon"></i>
+                            <span>북마크만 보기</span>
+                            <span id="bookmarkBadge" class="ml-1 px-1.5 py-0.5 text-[10px] rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">0</span>
+                        </button>
+                        <button onclick="expandAllAccordions()" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                            <i class="fa-solid fa-angles-down"></i>
+                            <span>모두 펼치기</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Body -->
+            <main class="flex-1 px-4 sm:px-8 py-8 max-w-6xl mx-auto w-full space-y-12" id="mainContent">
+
+                <!-- Hero Banner -->
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-academic-800 to-slate-900 text-white p-6 sm:p-10 shadow-lg">
+                    <div class="relative z-10 max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-medium mb-4">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>수학교육학 핵심 이론 총정리 (Mathematics Education Framework)</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3">수학적 사고의 본질과 교수학적 원리의 체계화</h2>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                            수학교육의 철학적·심리학적 기초부터 교수학적 변환론, 영역별 지도 원리 및 학생의 오개념, 공학 도구 활용까지 수학교육학의 전 영역을 구조화하여 제공합니다. 각 카드의 체크박스로 학습 진도를 관리하고 북마크를 활용해 복습하세요.
+                        </p>
+                        <div class="flex flex-wrap gap-3 text-xs">
+                            <span class="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">📐 수학화 & 반성적 추상화</span>
+                            <span class="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">🧠 관계적 이해 & 개념 이미지</span>
+                            <span class="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">🔄 교수학적 변환 & 상황론</span>
+                            <span class="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">📊 영역별 오개념 & 공학 도구</span>
+                        </div>
+                    </div>
+                    <!-- Decorative geometric background -->
+                    <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none select-none text-9xl font-serif pr-6 pb-2">
+                        $$\int \sum \pi$$
+                    </div>
+                </div>
+
+                <!-- No Search Results Message -->
+                <div id="noResultsBox" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <i class="fa-solid fa-magnifying-glass text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
+                    <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200">일치하는 검색 결과가 없습니다</h3>
+                    <p class="text-sm text-slate-500 mt-1">다른 키워드로 검색하거나 북마크 필터를 해제해 보세요.</p>
+                    <button onclick="clearSearch(); if(isBookmarkFilterActive) toggleBookmarkFilter();" class="mt-4 px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-xl hover:bg-indigo-700">전체 내용 보기</button>
+                </div>
+
+                <!-- ===================================================================== -->
+                <!-- SECTION 1: 수학교육학의 개관 -->
+                <!-- ===================================================================== -->
+                <section id="sec-1" class="study-section scroll-mt-24 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-sm">SECTION 01</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">수학교육학의 개관</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Card 1-1: 정의와 학문적 성격 -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-all" data-topic-id="t-1-1">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">1.1 학문적 정체성</span>
+                                    <h4 class="text-lg font-bold mt-0.5">수학교육학의 정의와 학문적 성격</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-1-1')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500 transition-colors" title="북마크">
+                                        <i class="fa-regular fa-bookmark"></i>
+                                    </button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500 select-none" title="학습 완료 체크">
+                                        <input type="checkbox" onchange="toggleComplete('t-1-1')" class="complete-checkbox w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <p><strong>수학교육학(Mathematics Education / Didactics of Mathematics)</strong>은 수학의 교수·학습 현상을 과학적이고 체계적으로 연구하는 학문입니다.</p>
+                                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 space-y-2 border border-slate-100 dark:border-slate-700/50">
+                                    <div class="flex gap-2">
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400 shrink-0">• 응용학문적 성격:</span>
+                                        <span>수학을 핵심 기반으로 교육학, 심리학, 철학, 사회학, 인지과학 등의 이론을 통합적으로 활용합니다.</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400 shrink-0">• 독자적 과학성:</span>
+                                        <span>단순한 '수학+교육학'이 아니라 수학적 지식의 특수성(추상성, 형식성, 계통성)에 기인한 고유한 교수학적 현상을 탐구합니다(슈타이너, 브루소).</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400 shrink-0">• 실천적 규범성:</span>
+                                        <span>교실 현장의 문제 해결과 교육과정 개선을 지향하는 실천 지향적 학문입니다.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Card 1-2: 수리철학적 관점 -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-all" data-topic-id="t-1-2">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">1.2 수리철학 패러다임</span>
+                                    <h4 class="text-lg font-bold mt-0.5">절대주의 vs 준경험주의(구성주의)</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-1-2')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+                                        <i class="fa-regular fa-bookmark"></i>
+                                    </button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500 select-none">
+                                        <input type="checkbox" onchange="toggleComplete('t-1-2')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="p-3.5 rounded-xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40">
+                                        <h5 class="font-bold text-rose-700 dark:text-rose-400 mb-1">절대주의 (Absolutism)</h5>
+                                        <p class="text-xs">논리주의, 직관주의, 형식주의. 수학적 지식을 절대적·불변적·객관적 진리로 간주. 교사 중심의 완성된 수학 전달(연역적 제시) 강조.</p>
+                                    </div>
+                                    <div class="p-3.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40">
+                                        <h5 class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">준경험주의 (Quasi-empiricism)</h5>
+                                        <p class="text-xs">라카토스(Lakatos), 어네스트. 수학은 인간의 사회적·역사적 산물이며 추측과 반박을 통해 성장하는 오류 가능한 지식. 학습자의 능동적 구성 강조.</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 pt-1">
+                                    * <strong>라카토스의 증명과 반박:</strong> 원시적 추측 → 증명 → 반례(국소적/전역적 반례) 등장 → 추측과 증명의 개선 과정을 통해 수학적 개념이 발달함.
+                                </p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- Card 1-3: 역사적 흐름 및 교육과정 변천사 (Timeline Accordion) -->
+                    <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-1-3">
+                        <div class="flex items-start justify-between gap-2 mb-4">
+                            <div>
+                                <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">1.3 역사적 흐름</span>
+                                <h4 class="text-lg font-bold mt-0.5">수학교육 개혁 운동과 우리나라 교육과정 변천사</h4>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="toggleBookmark('t-1-3')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                                <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500 select-none">
+                                    <input type="checkbox" onchange="toggleComplete('t-1-3')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                    <span>완료</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+                            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border-l-4 border-slate-400">
+                                <span class="font-mono font-bold text-slate-500">1900년대 초</span>
+                                <h5 class="font-bold text-sm text-slate-800 dark:text-white mt-1 mb-1.5">페리 & 클라인의 근대화 운동</h5>
+                                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">유클리드 기하의 엄밀성 편중 탈피. 페리(실용성·실험실법 강조), 클라인(함수 개념을 통합적 중심 개념으로 도입).</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border-l-4 border-indigo-500">
+                                <span class="font-mono font-bold text-indigo-500">1950~60년대</span>
+                                <h5 class="font-bold text-sm text-slate-800 dark:text-white mt-1 mb-1.5">새수학 운동 (New Math)</h5>
+                                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">스푸트니크 쇼크 및 브루너의 '지식의 구조' 영향. 집합·대수적 구조·엄밀성 강조(우리나라 제3차 교육과정 반영) → 지나친 추상화로 실패.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border-l-4 border-amber-500">
+                                <span class="font-mono font-bold text-amber-500">1970~80년대</span>
+                                <h5 class="font-bold text-sm text-slate-800 dark:text-white mt-1 mb-1.5">기본으로 돌아가기 & 문제해결</h5>
+                                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">새수학 반동으로 기초 계산 기능(Back to Basics) 강조 후, NCTM '의제 행동(An Agenda for Action, 1980)'에서 <strong>문제해결</strong>을 최우선 목표로 설정.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border-l-4 border-emerald-500">
+                                <span class="font-mono font-bold text-emerald-500">1989년 ~ 현재</span>
+                                <h5 class="font-bold text-sm text-slate-800 dark:text-white mt-1 mb-1.5">규준 운동과 역량 중심 교육과정</h5>
+                                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">NCTM Standards(추론, 의사소통, 연결성, 표상). 한국 2015·2022 개정 교육과정: 6대 수학 교과 역량(문제해결, 추론, 창의·융합, 의사소통, 정보처리, 태도 및 실천) 및 AI·디지털 소양 강화.</p>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- ===================================================================== -->
+                <!-- SECTION 2: 수학교육 심리학 및 학습 이론 -->
+                <!-- ===================================================================== -->
+                <section id="sec-2" class="study-section scroll-mt-24 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-sm">SECTION 02</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">수학교육 심리학 및 학습 이론</h3>
+                        </div>
+                    </div>
+
+                    <!-- Theorists Comparative Table -->
+                    <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-2-1">
+                        <div class="flex items-start justify-between gap-2 mb-4">
+                            <div>
+                                <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">2.1 핵심 이론가 한눈에 비교</span>
+                                <h4 class="text-lg font-bold mt-0.5">주요 수학교육 심리학자 비교 매트릭스</h4>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="toggleBookmark('t-2-1')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500 transition-colors">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                                <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500 select-none">
+                                    <input type="checkbox" onchange="toggleComplete('t-2-1')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                    <span>완료</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700">
+                                        <th class="p-3 font-bold w-32">이론가</th>
+                                        <th class="p-3 font-bold w-40">핵심 이론 / 키워드</th>
+                                        <th class="p-3 font-bold">주요 개념 및 학습 메커니즘</th>
+                                        <th class="p-3 font-bold">수학교육적 시사점</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-600 dark:text-slate-300">
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                                        <td class="p-3 font-bold text-slate-900 dark:text-white">피아제<br><span class="text-xs font-normal text-slate-400">Piaget</span></td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-medium">반성적 추상화<br>조작적 구성주의</span></td>
+                                        <td class="p-3">동화와 조절을 통한 평형화. 경험적 추상화(사물의 물리적 성질)와 구별되는 <strong>반성적 추상화</strong>(행동·조작의 조정에서 법칙 추출, 투사와 반사) 강조.</td>
+                                        <td class="p-3">학생의 인지발달 단계(전조작~형식적 조작) 고려. 구체적 조작 활동을 통한 내면화 유도.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                                        <td class="p-3 font-bold text-slate-900 dark:text-white">비고츠키<br><span class="text-xs font-normal text-slate-400">Vygotsky</span></td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-medium">근접발달영역(ZPD)<br>사회적 구성주의</span></td>
+                                        <td class="p-3">실제적 발달 수준과 잠재적 발달 수준 간의 간극인 ZPD 내에서 교사나 유능한 또래의 <strong>비계설정(Scaffolding)</strong> 및 언어적 매개로 내면화 발생.</td>
+                                        <td class="p-3">일상적 개념과 과학적(수학적) 개념의 상호작용. 모둠 협력 학습 및 수학적 담화의 중요성.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                                        <td class="p-3 font-bold text-slate-900 dark:text-white">브루너<br><span class="text-xs font-normal text-slate-400">Bruner</span></td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-medium">EIS 표상 이론<br>발견학습·나선형</span></td>
+                                        <td class="p-3">지식의 표현 양식: <strong>작동적(Enactive) → 영상적(Iconic) → 상징적(Symbolic)</strong>. 어떤 교과든 지적으로 올바른 형식으로 표현하면 어떤 연령에도 가르칠 수 있음.</td>
+                                        <td class="p-3">구체물 조작에서 시각적 도식, 기호화로 나아가는 EIS 번역 활동 및 나선형 교육과정 구성.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                                        <td class="p-3 font-bold text-slate-900 dark:text-white">딘즈<br><span class="text-xs font-normal text-slate-400">Dienes</span></td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-medium">역동적 원리<br>다양성의 원리</span></td>
+                                        <td class="p-3">개념 형성 6단계(자유놀이→게임→공통성탐구→표상→기호화→형식화). <strong>지각적 다양성</strong>(외형 변화)과 <strong>수학적 다양성</strong>(수학적 변인 변화)의 원리.</td>
+                                        <td class="p-3">MAB(다진수 블록), 대수 막대 등 다양한 교구 활용. 본질적 구조 추출을 위한 비본질적 속성 변화.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                                        <td class="p-3 font-bold text-slate-900 dark:text-white">스켐프<br><span class="text-xs font-normal text-slate-400">Skemp</span></td>
+                                        <td class="p-3"><span class="px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 text-xs font-medium">관계적 이해 vs<br>도구적 이해</span></td>
+                                        <td class="p-3"><strong>도구적 이해</strong>(이유를 모른 채 규칙·공식만 암기하여 적용) vs <strong>관계적 이해</strong>(무엇을 해야 할지뿐 아니라 왜 그런지 원리와 스키마 연결을 파악).</td>
+                                        <td class="p-3">관계적 이해의 장점: 새로운 과제에 적응 용이, 기억에 오래 남음, 내적 동기 유발, 개념 스키마의 유기적 확장.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+
+                    <!-- Accordion Details for Van Hiele & Freudenthal -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Van Hiele -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-2-2">
+                            <div class="flex items-start justify-between gap-2 mb-3">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">2.2 기하 학습 이론</span>
+                                    <h4 class="text-lg font-bold mt-0.5">반 힐레(Van Hiele)의 기하 학습 수준 이론</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-2-2')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-2-2')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">기하적 사고 수준은 연령이 아닌 <strong>교수학적 경험</strong>에 의해 순차적·불연속적으로 발달합니다.</p>
+                            
+                            <div class="space-y-2 text-xs">
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold shrink-0">0수준</span>
+                                    <div><strong>시각적 인식 수준:</strong> 도형을 전체적인 외양(모양)으로만 파악. 성질 분석 불가.</div>
+                                </div>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold shrink-0">1수준</span>
+                                    <div><strong>분석적 수준:</strong> 도형의 구성 요소와 성질을 분석하나, 성질 간 관계나 포함 관계는 이해 못함.</div>
+                                </div>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold shrink-0">2수준</span>
+                                    <div><strong>비형식적 연역(관계적) 수준:</strong> 성질 간 논리적 관계 및 도형 간 포함 관계(정사각형은 직사각형이다) 이해.</div>
+                                </div>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold shrink-0">3수준</span>
+                                    <div><strong>형식적 연역 수준:</strong> 공리, 정의, 정리의 체계를 이해하고 연역적 증명을 구성함.</div>
+                                </div>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold shrink-0">4수준</span>
+                                    <div><strong>엄밀성 수준:</strong> 다양한 공리계(비유클리드 기하 등)를 비교·분석하는 수준.</div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500">
+                                <strong>교수학습 5단계:</strong> 질의/안내 → 안내된 탐구 → 명료화 → 자유 탐구 → 통합
+                            </div>
+                        </article>
+
+                        <!-- Freudenthal -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-2-3">
+                            <div class="flex items-start justify-between gap-2 mb-3">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">2.3 현실적 수학교육(RME)</span>
+                                    <h4 class="text-lg font-bold mt-0.5">프로이덴탈(Freudenthal)의 수학화 이론</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-2-3')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-2-3')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <p>수학은 완성된 결과물이 아니라 <strong>'인간의 활동(Human Activity)'</strong>이며, 현실 세계를 수학적 수단으로 조직하는 <strong>수학화(Mathematization)</strong>가 핵심입니다.</p>
+                                <div class="p-3 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 space-y-1.5 text-xs">
+                                    <div><strong>• 수평적 수학화:</strong> 비수학적 현실 맥락의 문제를 수학적 기호와 모델로 변환하는 과정 (현실 → 수학).</div>
+                                    <div><strong>• 수직적 수학화:</strong> 수학적 체계 내부에서 개념을 정교화, 추상화, 일반화하는 과정 (수학 → 고차원 수학).</div>
+                                </div>
+                                <ul class="space-y-1 text-xs text-slate-600 dark:text-slate-400 list-disc pl-4">
+                                    <li><strong>안내된 재발명(Guided Reinvention):</strong> 인류가 수학을 발명한 역사적 과정을 학습자가 교사의 안내 아래 재경험함.</li>
+                                    <li><strong>반교수학적 전도 비판:</strong> 완성된 형식적 수학을 먼저 가르치고 응용을 나중에 다루는 전통적 방식을 비판(현상과 본질의 교수학적 현상학 강조).</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- ===================================================================== -->
+                <!-- SECTION 3: 수학적 사고와 문제해결 -->
+                <!-- ===================================================================== -->
+                <section id="sec-3" class="study-section scroll-mt-24 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-sm">SECTION 03</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">수학적 사고와 문제해결</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <!-- Polya & Schoenfeld -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-3-1">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">3.1 문제해결 이론</span>
+                                    <h4 class="text-lg font-bold mt-0.5">폴리아(Pólya)와 쇤펠드(Schoenfeld)</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-3-1')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-3-1')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Tabs for Polya vs Schoenfeld -->
+                            <div class="flex gap-2 mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">
+                                <button onclick="switchSubTab(this, 'polya-tab')" class="subtab-btn active px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white">폴리아의 4단계 & 발견술</button>
+                                <button onclick="switchSubTab(this, 'schoenfeld-tab')" class="subtab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">쇤펠드의 4가지 요인</button>
+                            </div>
+
+                            <div id="polya-tab" class="subtab-content space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70">
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400">1. 문제의 이해</span>
+                                        <p class="text-xs mt-1">미지인 것, 주어진 자료, 조건 파악 및 그림/기호 도입.</p>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70">
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400">2. 계획의 수립</span>
+                                        <p class="text-xs mt-1">관련 문제 회상, 보조문제 도입, 유추·일반화·특수화 등 <strong>발견술(Heuristics)</strong> 활용.</p>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70">
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400">3. 계획의 실행</span>
+                                        <p class="text-xs mt-1">세운 계획의 각 단계를 논리적으로 점검하며 실행.</p>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70">
+                                        <span class="font-bold text-indigo-600 dark:text-indigo-400">4. 반성 (Looking Back)</span>
+                                        <p class="text-xs mt-1">결과 검증, 다른 풀이 모색, 결과와 방법의 일반화 (가장 중요시됨).</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="schoenfeld-tab" class="subtab-content hidden space-y-2 text-xs text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">폴리아의 발견술이 실제 교실에서 잘 작동하지 않는 이유를 분석하여 인지적·정의적·메타인지적 요소를 통합했습니다.</p>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800"><strong>1. 인지적 자원(Resources):</strong> 학생이 보유한 기초 수학 지식, 공식, 절차적 기능.</div>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800"><strong>2. 발견술(Heuristics):</strong> 비정형 문제를 해결하기 위한 전략과 기법(거꾸로 풀기, 표 만들기 등).</div>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800"><strong>3. 통제(Control / 메타인지):</strong> 자신의 사고 과정을 모니터링하고 전략을 선택·수정·포기하는 자기조절 능력.</div>
+                                <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800"><strong>4. 신념 체계(Belief Systems):</strong> 수학 본질과 자기 효능감에 대한 신념(예: "모든 수학 문제는 5분 안에 풀려야 한다"는 오신념).</div>
+                            </div>
+                        </article>
+
+                        <!-- Mathematical Modeling & Reasoning -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-3-2">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">3.2 수학적 과정</span>
+                                    <h4 class="text-lg font-bold mt-0.5">수학적 모델링, 추론 및 의사소통</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-3-2')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-3-2')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <div class="p-3.5 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/40">
+                                    <h5 class="font-bold text-amber-800 dark:text-amber-300 text-xs mb-1">🔄 수학적 모델링 순환 과정 (Blum & Leiß)</h5>
+                                    <p class="text-xs">실세계 문제 상황 → 상황 모델(단순화·가정) → <strong>수학적 모델</strong>(수식·함수화) → 수학적 해 도출 → 실세계 맥락에서 <strong>해석 및 타당성 검증</strong> (부적합 시 재수정).</p>
+                                </div>
+                                <div class="space-y-2 text-xs">
+                                    <p><strong>• 개연적 추론 vs 연역적 추론:</strong> 귀납·유추를 통한 추측(Conjecture) 생성(개연적 추론)과 명제의 참을 논리적으로 정당화하는 연역적 추론의 균형.</p>
+                                    <p><strong>• 수학적 의사소통과 표상:</strong> 언어적, 시각적, 기호적, 구체적 표상 간의 번역 능력 및 수학적 정당화 담화 참여.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- ===================================================================== -->
+                <!-- SECTION 4: 교수학적 변환과 교수·학습 원리 -->
+                <!-- ===================================================================== -->
+                <section id="sec-4" class="study-section scroll-mt-24 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-sm">SECTION 04</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">교수학적 변환과 교수·학습 원리</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Chevallard & Brousseau -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-4-1">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">4.1 프랑스 수학교육학</span>
+                                    <h4 class="text-lg font-bold mt-0.5">교수학적 변환론 & 교수학적 상황론</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-4-1')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-4-1')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700">
+                                    <h5 class="font-bold text-sm text-indigo-600 dark:text-indigo-400 mb-1">슈발라르(Chevallard)의 교수학적 변환론</h5>
+                                    <p class="mb-2"><strong>학문적 지식(Savoir Savant) → 가르칠 지식(교육과정/교과서) → 가르쳐진 지식(수업) → 학습된 지식</strong>으로 변형되는 과정.</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">• <strong>외적 변환(Noosphere·지식권):</strong> 학문적 지식을 교육과정화(탈맥락화·탈개인화)함.<br>• <strong>내적 변환(교사):</strong> 교사가 학생 수준에 맞게 재맥락화·재개인화함.</p>
+                                </div>
+
+                                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700">
+                                    <h5 class="font-bold text-sm text-emerald-600 dark:text-emerald-400 mb-1">브루소(Brousseau)의 교수학적 상황론</h5>
+                                    <p class="mb-1.5">교사가 의도한 지식을 학생 스스로 구성하도록 설계된 <strong>비교수학적 상황(Adidactical Situation)</strong>이 핵심입니다.</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">• <strong>단계:</strong> 행동 상황 → 형식화 상황 → 타당화 상황 → 제도화(Institutionalization, 교사의 공식적 정리)<br>• <strong>교수학적 계약과 역설:</strong> 토파즈 효과(과도한 힌트로 사고 기회 박탈), 쥬르댕 효과(사소한 행동을 심오한 지식으로 오인).</p>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Concept Image/Definition & Epistemological Obstacles -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-4-2">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">4.2 개념 형성과 장애</span>
+                                    <h4 class="text-lg font-bold mt-0.5">개념 이미지·개념 정의 & 인식론적 장애</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-4-2')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-4-2')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <div class="p-3.5 rounded-xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40">
+                                    <h5 class="font-bold text-sm text-purple-700 dark:text-purple-300 mb-1">톨과 비너(Tall & Vinner)의 개념 이미지와 개념 정의</h5>
+                                    <p>• <strong>개념 정의(Concept Definition):</strong> 개념을 규정하는 공식적인 언어적·기호적 진술.<br>
+                                    • <strong>개념 이미지(Concept Image):</strong> 개인의 머릿속에 개념과 연결된 모든 심상, 성질, 경험의 총체. 제한된 전형적 예(예: 밑변이 수평인 삼각형, 하나의 식인 함수)만 경험하면 빈약한 개념 이미지가 형성되어 오류 유발.</p>
+                                </div>
+
+                                <div class="p-3.5 rounded-xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40">
+                                    <h5 class="font-bold text-sm text-rose-700 dark:text-rose-300 mb-1">인식론적 장애 (Epistemological Obstacle, 바슐라르·브루소)</h5>
+                                    <p>특정 맥락에서는 성공적이고 유효했던 선행 지식이 새로운 확장된 맥락에서는 부적절하게 작용하여 학습을 방해하는 인지적 저항입니다.</p>
+                                    <p class="mt-1 text-[11px] text-slate-500 dark:text-slate-400"><strong>대표 사례:</strong> 자연수 곱셈에서의 "곱하면 항상 커진다"는 신념이 소수·분수 곱셈($3 \times 0.5 = 1.5$)에서 장애로 작용; 무한집합에서 "전체는 부분보다 크다"는 유한집합 직관의 충돌.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- ===================================================================== -->
+                <!-- SECTION 5: 영역별 수학교육 & 학생들의 주요 오개념 -->
+                <!-- ===================================================================== -->
+                <section id="sec-5" class="study-section scroll-mt-24 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-sm">SECTION 05</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">영역별 수학교육 및 주요 오개념</h3>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Group for 5 Content Strands -->
+                    <div class="space-y-3">
+                        <!-- 5.1 수와 연산 -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm" data-topic-id="t-5-1">
+                            <div class="p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" onclick="toggleAccordion(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">1</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-slate-900 dark:text-white">수와 연산 (Number & Operations)</h4>
+                                        <p class="text-xs text-slate-500">분수의 다중 의미, 음수 지도 모델, 무리수와 실수의 완비성</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3" onclick="event.stopPropagation()">
+                                    <button onclick="toggleBookmark('t-5-1')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <input type="checkbox" onchange="toggleComplete('t-5-1')" class="complete-checkbox w-4 h-4 rounded text-indigo-600" title="완료">
+                                    <button onclick="toggleAccordion(this.closest('.topic-card').firstElementChild)" class="p-1 text-slate-400">
+                                        <i class="fa-solid fa-chevron-down accordion-icon transition-transform duration-200"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="accordion-body px-5 pb-5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2.5">
+                                <p><strong>• 핵심 지도 원리:</strong> 유리수(분수)의 5가지 하위 개념(전체-부분, 몫, 비, 연산자, 측정)의 균형 지도. 음수 지도를 위한 모델(셈돌 모델, 수직선 모델, 형식불역의 원리에 의한 귀납적 외삽법).</p>
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 text-xs">
+                                    <strong class="text-rose-700 dark:text-rose-400">⚠️ 주요 오개념:</strong>
+                                    <ul class="list-disc pl-4 mt-1 space-y-1">
+                                        <li>분수 덧셈에서 분모끼리, 분자끼리 더하는 오류 ($\frac{1}{2} + \frac{1}{3} = \frac{2}{5}$) — 자연수 덧셈 도식의 과잉 일반화.</li>
+                                        <li>순환소수 $0.\dot{9} < 1$ 이라고 생각하는 극한 및 실수 완비성 직관 오류.</li>
+                                        <li>제곱근 기호의 오해: $\sqrt{a^2} = a$ (음수일 때 $-a$ 간과), $\sqrt{4} = \pm 2$ (제곱근과 근호 값 혼동).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- 5.2 대수 -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm" data-topic-id="t-5-2">
+                            <div class="p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" onclick="toggleAccordion(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-sm">2</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-slate-900 dark:text-white">대수 (Algebra)</h4>
+                                        <p class="text-xs text-slate-500">변수의 다면적 의미, 산술적 사고에서 대수적 사고로의 이행</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3" onclick="event.stopPropagation()">
+                                    <button onclick="toggleBookmark('t-5-2')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <input type="checkbox" onchange="toggleComplete('t-5-2')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                    <button onclick="toggleAccordion(this.closest('.topic-card').firstElementChild)" class="p-1 text-slate-400">
+                                        <i class="fa-solid fa-chevron-down accordion-icon transition-transform duration-200"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="accordion-body hidden px-5 pb-5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2.5">
+                                <p><strong>• 핵심 지도 원리:</strong> 우신(Usiskin)의 변수 개념(일반화의 패턴, 미지수, 변화하는 양, 매개변수). 스파드(Sfard)의 구조적 관점과 조작적 관점의 이중성.</p>
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 text-xs">
+                                    <strong class="text-rose-700 dark:text-rose-400">⚠️ 주요 오개념:</strong>
+                                    <ul class="list-disc pl-4 mt-1 space-y-1">
+                                        <li><strong>등호($=$)의 연산적 해석:</strong> 등호를 '동치 관계'가 아닌 '답을 구하라는 지시 기호'로 인식.</li>
+                                        <li><strong>닫힘의 욕구(Lack of Closure):</strong> $2x + 3$을 미완성된 계산으로 여겨 $5x$로 축약하려는 경향.</li>
+                                        <li><strong>문자식의 축약 오류(학생-교수 문제):</strong> "교수($P$)가 학생($S$)보다 6배 많다"를 $6P = S$로 잘못 세우는 오류(문자를 대상의 개수가 아닌 라벨/단위로 인식).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- 5.3 함수 -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm" data-topic-id="t-5-3">
+                            <div class="p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" onclick="toggleAccordion(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-sm">3</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-slate-900 dark:text-white">함수와 해석 (Functions & Analysis)</h4>
+                                        <p class="text-xs text-slate-500">변화율·종속성에서 대응(디리클레)으로의 발달, 다중 표상 번역</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3" onclick="event.stopPropagation()">
+                                    <button onclick="toggleBookmark('t-5-3')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <input type="checkbox" onchange="toggleComplete('t-5-3')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                    <button onclick="toggleAccordion(this.closest('.topic-card').firstElementChild)" class="p-1 text-slate-400">
+                                        <i class="fa-solid fa-chevron-down accordion-icon transition-transform duration-200"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="accordion-body hidden px-5 pb-5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2.5">
+                                <p><strong>• 핵심 지도 원리:</strong> 공변(Covariation) 추론과 대응 관점의 통합. 언어적 상황, 대응표, 대수식, 그래프(야누스적 표상) 간의 자유로운 번역 훈련.</p>
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 text-xs">
+                                    <strong class="text-rose-700 dark:text-rose-400">⚠️ 주요 오개념:</strong>
+                                    <ul class="list-disc pl-4 mt-1 space-y-1">
+                                        <li><strong>그래프를 그림으로 해석(Graph-as-Picture):</strong> 시간-거리 그래프를 산의 경사나 실제 이동 경로와 혼동.</li>
+                                        <li><strong>함수 개념 이미지의 제한:</strong> 함수는 반드시 하나의 대수식 $y = f(x)$으로 표현되어야 하며, 연속이고 매끄러워야 한다는 오해(상수함수나 구간별로 정의된 함수를 함수가 아니라고 판단).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- 5.4 기하와 측정 -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm" data-topic-id="t-5-4">
+                            <div class="p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" onclick="toggleAccordion(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-sm">4</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-slate-900 dark:text-white">기하와 측정 (Geometry & Measurement)</h4>
+                                        <p class="text-xs text-slate-500">피슈바인의 도형 개념(Figural Concept), 정당화와 증명의 위계</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3" onclick="event.stopPropagation()">
+                                    <button onclick="toggleBookmark('t-5-4')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <input type="checkbox" onchange="toggleComplete('t-5-4')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                    <button onclick="toggleAccordion(this.closest('.topic-card').firstElementChild)" class="p-1 text-slate-400">
+                                        <i class="fa-solid fa-chevron-down accordion-icon transition-transform duration-200"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="accordion-body hidden px-5 pb-5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2.5">
+                                <p><strong>• 핵심 지도 원리:</strong> 피슈바인(Fischbein)의 <strong>도형 개념</strong>(공간적 이미지 속성과 개념적·논리적 속성의 융합). 드 빌리어스(de Villiers)의 증명의 기능(검증, 설명, 체계화, 발견, 의사소통).</p>
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 text-xs">
+                                    <strong class="text-rose-700 dark:text-rose-400">⚠️ 주요 오개념:</strong>
+                                    <ul class="list-disc pl-4 mt-1 space-y-1">
+                                        <li><strong>전형적 방향성 고착:</strong> 밑변이 바닥에 수평으로 놓이지 않은 직각삼각형이나 기울어진 정사각형(마름모로만 인식)을 인지하지 못함.</li>
+                                        <li><strong>둘레와 넓이의 혼동:</strong> 둘레가 같으면 넓이도 같거나, 둘레가 길어지면 넓이도 반드시 커진다는 오개념.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- 5.5 확률과 통계 -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm" data-topic-id="t-5-5">
+                            <div class="p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors" onclick="toggleAccordion(this)">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-sm">5</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-slate-900 dark:text-white">확률과 통계 (Probability & Statistics)</h4>
+                                        <p class="text-xs text-slate-500">통계적 소양과 변이성, 확률적 직관과 인지적 편향</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3" onclick="event.stopPropagation()">
+                                    <button onclick="toggleBookmark('t-5-5')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <input type="checkbox" onchange="toggleComplete('t-5-5')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                    <button onclick="toggleAccordion(this.closest('.topic-card').firstElementChild)" class="p-1 text-slate-400">
+                                        <i class="fa-solid fa-chevron-down accordion-icon transition-transform duration-200"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="accordion-body hidden px-5 pb-5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2.5">
+                                <p><strong>• 핵심 지도 원리:</strong> PPDAC 통계적 탐구 주기(문제-계획-자료-분석-결론). 수학적(고전적) 확률, 통계적(경험적) 확률, 주관적 확률의 조화와 큰 수의 법칙 시뮬레이션.</p>
+                                <div class="p-3 rounded-xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/40 text-xs">
+                                    <strong class="text-rose-700 dark:text-rose-400">⚠️ 주요 오개념 (카너먼 & 트버스키 등):</strong>
+                                    <ul class="list-disc pl-4 mt-1 space-y-1">
+                                        <li><strong>대표성 휴리스틱 & 도박사의 오류:</strong> 동전을 5번 던져 연속 앞면이 나오면 다음엔 뒷면이 나올 확률이 높다고 믿는 독립시행 오해.</li>
+                                        <li><strong>동등 가능성 편향:</strong> 모든 사건의 발생 확률을 무조건 $\frac{1}{n}$로 동일하게 간주.</li>
+                                        <li><strong>결과 접근법(Outcome Approach):</strong> 확률적 예측을 단일 시행의 확실한 결과 예언으로 해석.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- ===================================================================== -->
+                <!-- SECTION 6: 수학교육 평가 및 공학 도구 활용 -->
+                <!-- ===================================================================== -->
+                <section id="sec-6" class="study-section scroll-mt-24 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-sm">SECTION 06</span>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">수학교육 평가 및 공학 도구 활용</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Assessment -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-6-1">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">6.1 평가 패러다임 전환</span>
+                                    <h4 class="text-lg font-bold mt-0.5">과정 중심 평가와 대안적 평가 방법</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-6-1')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-6-1')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="space-y-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <p>결과 중심의 선다형 지필평가를 넘어, 학습 과정에서의 수학적 사고력과 교과 역량 성장을 지원하는 <strong>학습을 위한 평가(Assessment for Learning)</strong>를 지향합니다.</p>
+                                <div class="grid grid-cols-2 gap-2 pt-1">
+                                    <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800">
+                                        <strong class="text-indigo-600 dark:text-indigo-400">서·논술형 평가</strong>
+                                        <p class="mt-0.5">문제해결 전략, 추론의 정당화 과정 평가. 분석적·총체적 채점 기준표(Rubric) 활용.</p>
+                                    </div>
+                                    <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800">
+                                        <strong class="text-indigo-600 dark:text-indigo-400">포트폴리오 & 관찰</strong>
+                                        <p class="mt-0.5">학습 결과물 누적 철, 프로젝트 탐구 보고서, 수학 일지, 자기평가·동료평가.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Technology in Math Ed -->
+                        <article class="topic-card bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm" data-topic-id="t-6-2">
+                            <div class="flex items-start justify-between gap-2 mb-4">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">6.2 디지털 테크놀로지</span>
+                                    <h4 class="text-lg font-bold mt-0.5">공학 도구 활용과 도구적 발생</h4>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleBookmark('t-6-2')" class="bookmark-btn p-1.5 rounded-lg text-slate-400 hover:text-amber-500"><i class="fa-regular fa-bookmark"></i></button>
+                                    <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-slate-500">
+                                        <input type="checkbox" onchange="toggleComplete('t-6-2')" class="complete-checkbox w-4 h-4 rounded text-indigo-600">
+                                        <span>완료</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="space-y-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <ul class="space-y-1.5">
+                                    <li><strong>• DGS (동적 기하 소프트웨어 - GeoGebra, Cabri):</strong> '끌기(Dragging)' 기능을 통해 기하적 대상의 변하지 않는 불변량(Invariants)을 귀납적으로 발견하고 연역적 증명의 동기를 부여함.</li>
+                                    <li><strong>• CAS (컴퓨터 대수 시스템) & 스프레드시트:</strong> 복잡한 기호 조작 부담을 줄이고 개념적 탐색과 귀납적 패턴 발견에 집중.</li>
+                                    <li><strong>• 도구적 발생 (Instrumental Genesis, 라바르델·베르뉴):</strong> 인공물(Artifact)이 사용자의 활용 도식(Utilization Scheme)과 결합하여 유의미한 학습 도구(Instrument)로 전환되는 과정(도구화 + 도구적 통합).</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- ===================================================================== -->
+                <!-- INTERACTIVE LAB: FLASHCARDS & SELF-ASSESSMENT QUIZ -->
+                <!-- ===================================================================== -->
+                <section id="interactive-lab" class="scroll-mt-24 pt-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-md">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5 mb-6">
+                            <div>
+                                <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold">INTERACTIVE REVIEW LAB</span>
+                                <h3 class="text-xl sm:text-2xl font-bold mt-1.5 text-slate-900 dark:text-white">핵심 개념 플래시카드 & 마스터리 퀴즈</h3>
+                            </div>
+                            <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                                <button id="labTabFlash" onclick="switchLabMode('flash')" class="px-4 py-2 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm transition-all">
+                                    <i class="fa-solid fa-clone mr-1.5"></i>용어 플래시카드
+                                </button>
+                                <button id="labTabQuiz" onclick="switchLabMode('quiz')" class="px-4 py-2 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 transition-all">
+                                    <i class="fa-solid fa-circle-question mr-1.5"></i>확인 퀴즈 (8문항)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- MODE 1: FLASHCARDS -->
+                        <div id="flashcardContainer" class="max-w-2xl mx-auto">
+                            <div class="flex justify-between items-center text-xs text-slate-500 mb-3">
+                                <span id="cardCategoryBadge" class="px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-semibold">학습 이론</span>
+                                <span id="cardCounter" class="font-mono font-bold">1 / 10</span>
+                            </div>
+
+                            <!-- 3D Flip Card -->
+                            <div class="perspective-1000 h-64 sm:h-72 cursor-pointer select-none" onclick="flipCard()">
+                                <div id="flashcardInner" class="relative w-full h-full transform-style-3d">
+                                    <!-- Front -->
+                                    <div class="absolute inset-0 backface-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-indigo-50/70 dark:from-slate-800 dark:to-slate-800/90 border-2 border-indigo-200/70 dark:border-indigo-500/30 p-6 flex flex-col items-center justify-center text-center shadow-sm">
+                                        <span class="text-xs font-semibold text-indigo-500 mb-2 uppercase tracking-wider">핵심 용어 / 이론</span>
+                                        <h4 id="cardFrontText" class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-snug">반성적 추상화<br>(Reflective Abstraction)</h4>
+                                        <p class="text-xs text-slate-400 mt-6 flex items-center gap-1.5"><i class="fa-solid fa-rotate"></i> 카드를 클릭하여 개념 설명 확인</p>
+                                    </div>
+                                    <!-- Back -->
+                                    <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl bg-indigo-600 dark:bg-indigo-900 text-white p-6 sm:p-8 flex flex-col items-center justify-center text-center shadow-md">
+                                        <span class="text-xs font-semibold text-indigo-200 mb-2 uppercase tracking-wider">핵심 정의 및 의의</span>
+                                        <p id="cardBackText" class="text-sm sm:text-base leading-relaxed font-medium">피아제가 제시한 개념으로, 사물의 물리적 성질이 아닌 학습자 자신의 행동이나 정신적 조작의 조정으로부터 일반적 법칙을 이끌어내는 과정(투사와 반사)입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card Navigation Controls -->
+                            <div class="flex items-center justify-between mt-5 gap-3">
+                                <button onclick="prevCard()" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold flex items-center gap-2 transition-colors">
+                                    <i class="fa-solid fa-arrow-left"></i> 이전 카드
+                                </button>
+                                <button onclick="shuffleCards()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5 transition-colors">
+                                    <i class="fa-solid fa-shuffle"></i> 순서 섞기
+                                </button>
+                                <button onclick="nextCard()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-2 transition-colors shadow-sm">
+                                    다음 카드 <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- MODE 2: SELF-ASSESSMENT QUIZ -->
+                        <div id="quizContainer" class="hidden max-w-2xl mx-auto">
+                            <div id="quizActiveView">
+                                <div class="flex justify-between items-center text-xs text-slate-500 mb-3">
+                                    <span id="quizProgressLabel" class="font-bold text-indigo-600 dark:text-indigo-400">문제 1 / 8</span>
+                                    <span id="quizScoreLabel" class="font-mono">현재 점수: 0점</span>
+                                </div>
+                                <div class="p-5 sm:p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 mb-4">
+                                    <h4 id="quizQuestion" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-relaxed">질문 텍스트</h4>
+                                </div>
+                                <div id="quizOptions" class="space-y-2.5 mb-4">
+                                    <!-- Options injected via JS -->
+                                </div>
+                                <div id="quizFeedback" class="hidden p-4 rounded-xl text-xs sm:text-sm leading-relaxed mb-4"></div>
+                                <div class="flex justify-end">
+                                    <button id="nextQuizBtn" onclick="nextQuizQuestion()" class="hidden px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors">
+                                        다음 문제 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quiz Result Summary -->
+                            <div id="quizResultView" class="hidden text-center py-8 space-y-4">
+                                <div class="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mx-auto">
+                                    <i class="fa-solid fa-trophy"></i>
+                                </div>
+                                <h4 class="text-2xl font-bold text-slate-900 dark:text-white">퀴즈 완료!</h4>
+                                <p id="finalScoreText" class="text-base text-slate-600 dark:text-slate-300">총 8문제 중 0문제를 맞혔습니다.</p>
+                                <button onclick="restartQuiz()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors">
+                                    <i class="fa-solid fa-rotate-right mr-1.5"></i>다시 도전하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Footer -->
+            <footer class="border-t border-slate-200 dark:border-slate-800 py-6 px-4 sm:px-8 text-center text-xs text-slate-500 dark:text-slate-400">
+                <p>수학교육학 핵심 이론 체계화 아카이브 &copy; 2026 Mathematics Education Study Dashboard</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Toast Notification (Replaces alert) -->
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 dark:bg-slate-800 text-white px-4 py-3 rounded-xl shadow-lg border border-slate-700 text-xs font-medium flex items-center gap-2.5">
+            <i id="toastIcon" class="fa-solid fa-circle-info text-indigo-400"></i>
+            <span id="toastMessage">알림 메시지</span>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // 1. STATE MANAGEMENT (LOCAL STORAGE: PROGRESS, BOOKMARKS, THEME)
+        // =========================================================================
+        const STORAGE_KEYS = {
+            COMPLETED: 'mathEd_completed_topics_v1',
+            BOOKMARKS: 'mathEd_bookmarked_topics_v1',
+            THEME: 'mathEd_theme_v1'
+        };
+
+        let completedTopics = new Set(JSON.parse(localStorage.getItem(STORAGE_KEYS.COMPLETED) || '[]'));
+        let bookmarkedTopics = new Set(JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKMARKS) || '[]'));
+        let isBookmarkFilterActive = false;
+
+        // Initialize UI on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            syncTopicStates();
+            renderFlashcard();
+            loadQuizQuestion();
+            setupSearchListener();
+            setupScrollSpy();
+        });
+
+        function showToast(msg, iconClass = 'fa-circle-check text-emerald-400') {
+            const box = document.getElementById('toastBox');
+            document.getElementById('toastMessage').textContent = msg;
+            document.getElementById('toastIcon').className = `fa-solid ${iconClass}`;
+            box.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                box.classList.add('translate-y-20', 'opacity-0');
+            }, 2400);
+        }
+
+        // Theme Toggle
+        function initTheme() {
+            const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem(STORAGE_KEYS.THEME, isDark ? 'dark' : 'light');
+        }
+
+        // Mobile Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        // =========================================================================
+        // 2. PROGRESS & BOOKMARK SYSTEM
+        // =========================================================================
+        function syncTopicStates() {
+            const cards = document.querySelectorAll('.topic-card');
+            const totalCount = cards.length;
+
+            cards.forEach(card => {
+                const id = card.dataset.topicId;
+                const checkbox = card.querySelector('.complete-checkbox');
+                const bookmarkBtn = card.querySelector('.bookmark-btn');
+                const bookmarkIcon = bookmarkBtn.querySelector('i');
+
+                // Sync completion checkbox
+                if (completedTopics.has(id)) {
+                    checkbox.checked = true;
+                    card.classList.add('ring-1', 'ring-emerald-500/40');
+                } else {
+                    checkbox.checked = false;
+                    card.classList.remove('ring-1', 'ring-emerald-500/40');
+                }
+
+                // Sync bookmark icon
+                if (bookmarkedTopics.has(id)) {
+                    bookmarkBtn.classList.add('text-amber-500');
+                    bookmarkBtn.classList.remove('text-slate-400');
+                    bookmarkIcon.className = 'fa-solid fa-bookmark';
+                } else {
+                    bookmarkBtn.classList.remove('text-amber-500');
+                    bookmarkBtn.classList.add('text-slate-400');
+                    bookmarkIcon.className = 'fa-regular fa-bookmark';
+                }
+            });
+
+            // Update Progress Bar
+            const completedCount = completedTopics.size;
+            const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+            document.getElementById('progressText').textContent = `${percent}%`;
+            document.getElementById('completedCountText').textContent = `${completedCount} / ${totalCount} 주제 완료`;
+            document.getElementById('bookmarkBadge').textContent = bookmarkedTopics.size;
+        }
+
+        function toggleComplete(topicId) {
+            if (completedTopics.has(topicId)) {
+                completedTopics.delete(topicId);
+            } else {
+                completedTopics.add(topicId);
+                showToast('학습 완료로 체크되었습니다.');
+            }
+            localStorage.setItem(STORAGE_KEYS.COMPLETED, JSON.stringify([...completedTopics]));
+            syncTopicStates();
+        }
+
+        function toggleBookmark(topicId) {
+            if (bookmarkedTopics.has(topicId)) {
+                bookmarkedTopics.delete(topicId);
+                showToast('북마크가 해제되었습니다.', 'fa-bookmark text-slate-400');
+            } else {
+                bookmarkedTopics.add(topicId);
+                showToast('중요 주제로 북마크되었습니다.', 'fa-bookmark text-amber-400');
+            }
+            localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify([...bookmarkedTopics]));
+            syncTopicStates();
+            if (isBookmarkFilterActive) applyFilters();
+        }
+
+        function resetProgress() {
+            completedTopics.clear();
+            localStorage.removeItem(STORAGE_KEYS.COMPLETED);
+            syncTopicStates();
+            showToast('학습 진도가 초기화되었습니다.', 'fa-rotate-left text-rose-400');
+        }
+
+        function toggleBookmarkFilter() {
+            isBookmarkFilterActive = !isBookmarkFilterActive;
+            const btn = document.getElementById('filterBookmarkBtn');
+            const icon = document.getElementById('bookmarkFilterIcon');
+
+            if (isBookmarkFilterActive) {
+                btn.classList.add('border-amber-500', 'bg-amber-50', 'dark:bg-amber-950/40');
+                icon.className = 'fa-solid fa-bookmark text-amber-500';
+            } else {
+                btn.classList.remove('border-amber-500', 'bg-amber-50', 'dark:bg-amber-950/40');
+                icon.className = 'fa-regular fa-bookmark text-amber-500';
+            }
+            applyFilters();
+        }
+
+        // =========================================================================
+        // 3. SEARCH & FILTERING ENGINE
+        // =========================================================================
+        function setupSearchListener() {
+            const input = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            input.addEventListener('input', () => {
+                clearBtn.classList.toggle('hidden', input.value.trim() === '');
+                applyFilters();
+            });
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const sections = document.querySelectorAll('.study-section');
+            let totalVisibleCards = 0;
+
+            sections.forEach(section => {
+                const cards = section.querySelectorAll('.topic-card');
+                let visibleInSection = 0;
+
+                cards.forEach(card => {
+                    const topicId = card.dataset.topicId;
+                    const textContent = card.innerText.toLowerCase();
+                    const matchesSearch = query === '' || textContent.includes(query);
+                    const matchesBookmark = !isBookmarkFilterActive || bookmarkedTopics.has(topicId);
+
+                    if (matchesSearch && matchesBookmark) {
+                        card.classList.remove('hidden');
+                        visibleInSection++;
+                        totalVisibleCards++;
+                        // Automatically open accordion if searching inside section 5
+                        const accBody = card.querySelector('.accordion-body');
+                        if (accBody && query !== '') {
+                            accBody.classList.remove('hidden');
+                        }
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                section.classList.toggle('hidden', visibleInSection === 0);
+            });
+
+            document.getElementById('noResultsBox').classList.toggle('hidden', totalVisibleCards > 0);
+        }
+
+        // =========================================================================
+        // 4. ACCORDIONS, TABS & SCROLL SPY
+        // =========================================================================
+        function toggleAccordion(headerEl) {
+            const card = headerEl.closest('.topic-card');
+            const body = card.querySelector('.accordion-body');
+            const icon = card.querySelector('.accordion-icon');
+            body.classList.toggle('hidden');
+            if (icon) {
+                icon.classList.toggle('rotate-180', !body.classList.contains('hidden'));
+            }
+        }
+
+        let allExpanded = false;
+        function expandAllAccordions() {
+            allExpanded = !allExpanded;
+            document.querySelectorAll('.accordion-body').forEach(body => {
+                body.classList.toggle('hidden', !allExpanded);
+            });
+            document.querySelectorAll('.accordion-icon').forEach(icon => {
+                icon.classList.toggle('rotate-180', allExpanded);
+            });
+            showToast(allExpanded ? '모든 영역별 상세 내용을 펼쳤습니다.' : '영역별 상세 내용을 접었습니다.');
+        }
+
+        function switchSubTab(btn, targetId) {
+            const container = btn.closest('.topic-card');
+            container.querySelectorAll('.subtab-btn').forEach(b => {
+                b.classList.remove('bg-indigo-600', 'text-white');
+                b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+            });
+            btn.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+            btn.classList.add('bg-indigo-600', 'text-white');
+
+            container.querySelectorAll('.subtab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(targetId).classList.remove('hidden');
+        }
+
+        function setupScrollSpy() {
+            const navLinks = document.querySelectorAll('.nav-item');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                document.querySelectorAll('section[id]').forEach(sec => {
+                    const top = sec.offsetTop - 140;
+                    if (window.scrollY >= top) {
+                        current = sec.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-indigo-50', 'dark:bg-slate-800', 'text-indigo-600', 'dark:text-indigo-400', 'font-bold');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('bg-indigo-50', 'dark:bg-slate-800', 'text-indigo-600', 'dark:text-indigo-400', 'font-bold');
+                    }
+                });
+            });
+        }
+
+        // =========================================================================
+        // 5. INTERACTIVE LAB: FLASHCARDS & QUIZ DATA + LOGIC
+        // =========================================================================
+        const flashcardsData = [
+            { category: '학습 심리학 (피아제)', front: '반성적 추상화\n(Reflective Abstraction)', back: '사물의 물리적 성질이 아닌 학습자 자신의 행동이나 정신적 조작의 조정(투사와 반사)으로부터 일반적 수학 법칙을 추출하는 인지적 과정입니다.' },
+            { category: '학습 심리학 (스켐프)', front: '관계적 이해 vs 도구적 이해', back: '도구적 이해는 이유를 모른 채 규칙·공식만 암기해 적용하는 것이며, 관계적 이해는 무엇을 해야 할지뿐 아니라 왜 그런지 원리와 개념 스키마 연결을 파악하는 것입니다.' },
+            { category: '기하 학습 (반 힐레)', front: '반 힐레 수준 2:\n비형식적 연역(관계적) 수준', back: '도형의 성질 간 논리적 관계를 이해하고, "정사각형은 직사각형이다"와 같은 도형 간의 포함 관계를 파악할 수 있는 수준입니다.' },
+            { category: '현실적 수학교육 (프로이덴탈)', front: '수평적 수학화 vs 수직적 수학화', back: '수평적 수학화는 현실 맥락의 문제를 수학적 모델로 변환하는 과정이며, 수직적 수학화는 수학적 체계 내부에서 개념을 정교화·일반화하는 과정입니다.' },
+            { category: '교수학적 변환 (슈발라르)', front: '교수학적 변환\n(Didactic Transposition)', back: '학문적 지식(Savoir Savant)이 교육과정과 교사를 거쳐 가르칠 지식 및 가르쳐진 지식으로 변형(탈맥락화 → 재맥락화)되는 과정입니다.' },
+            { category: '교수학적 상황론 (브루소)', front: '토파즈 효과 (Topaze Effect)', back: '학생이 스스로 문제를 해결하기 어려워할 때 교사가 과도한 힌트나 유도 질문을 제공하여 정작 학생의 수학적 사고 기회를 박탈하는 교수학적 계약의 역설입니다.' },
+            { category: '개념 형성 (톨 & 비너)', front: '개념 이미지 vs 개념 정의', back: '개념 정의는 공식적인 언어적·기호적 규정이며, 개념 이미지는 개인의 머릿속에 개념과 연결된 모든 심상, 성질, 경험의 총체입니다.' },
+            { category: '인지적 장애 (바슐라르)', front: '인식론적 장애\n(Epistemological Obstacle)', back: '특정 맥락에서는 유효했던 선행 지식이 확장된 새로운 수학적 맥락(예: 자연수 곱셈에서 소수 곱셈으로의 확장)에서 오류를 유발하는 인지적 저항입니다.' },
+            { category: '대수 교육', front: '닫힘의 욕구 (Lack of Closure)', back: '학생들이 2x + 3과 같은 대수적 표현식을 미완성된 계산 과정으로 인식하여 하나의 단일 항(5x)으로 억지로 축약하려는 인지적 경향입니다.' },
+            { category: '공학 도구 활용', front: '도구적 발생\n(Instrumental Genesis)', back: '물리적·디지털 인공물(Artifact)이 학습자의 활용 도식(Utilization Scheme)과 결합하여 유의미한 수학적 사고 도구(Instrument)로 전환되는 과정입니다.' }
+        ];
+
+        let currentCardIdx = 0;
+        let isCardFlipped = false;
+
+        function switchLabMode(mode) {
+            const flashBtn = document.getElementById('labTabFlash');
+            const quizBtn = document.getElementById('labTabQuiz');
+            const flashContainer = document.getElementById('flashcardContainer');
+            const quizContainer = document.getElementById('quizContainer');
+
+            if (mode === 'flash') {
+                flashBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm transition-all';
+                quizBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 transition-all';
+                flashContainer.classList.remove('hidden');
+                quizContainer.classList.add('hidden');
+            } else {
+                quizBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm transition-all';
+                flashBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 transition-all';
+                quizContainer.classList.remove('hidden');
+                flashContainer.classList.add('hidden');
+            }
+        }
+
+        function renderFlashcard() {
+            const item = flashcardsData[currentCardIdx];
+            const inner = document.getElementById('flashcardInner');
+            isCardFlipped = false;
+            inner.classList.remove('rotate-y-180');
+
+            document.getElementById('cardCategoryBadge').textContent = item.category;
+            document.getElementById('cardCounter').textContent = `${currentCardIdx + 1} / ${flashcardsData.length}`;
+            document.getElementById('cardFrontText').innerText = item.front;
+            document.getElementById('cardBackText').innerText = item.back;
+        }
+
+        function flipCard() {
+            isCardFlipped = !isCardFlipped;
+            document.getElementById('flashcardInner').classList.toggle('rotate-y-180', isCardFlipped);
+        }
+
+        function nextCard() {
+            currentCardIdx = (currentCardIdx + 1) % flashcardsData.length;
+            renderFlashcard();
+        }
+
+        function prevCard() {
+            currentCardIdx = (currentCardIdx - 1 + flashcardsData.length) % flashcardsData.length;
+            renderFlashcard();
+        }
+
+        function shuffleCards() {
+            for (let i = flashcardsData.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcardsData[i], flashcardsData[j]] = [flashcardsData[j], flashcardsData[i]];
+            }
+            currentCardIdx = 0;
+            renderFlashcard();
+            showToast('플래시카드 순서를 무작위로 섞었습니다.');
+        }
+
+        // Quiz Data & Logic
+        const quizData = [
+            {
+                q: '브루너(Bruner)가 제시한 지식의 3가지 표상 양식이 발달 순서대로 바르게 나열된 것은?',
+                options: ['영상적 → 작동적 → 상징적', '작동적 → 영상적 → 상징적', '상징적 → 영상적 → 작동적', '작동적 → 상징적 → 영상적'],
+                answer: 1,
+                explanation: '브루너의 EIS 이론에 따르면 학습자의 표상은 구체물 조작 중심의 작동적(Enactive) → 시각적 도식 중심의 영상적(Iconic) → 언어·수식 중심의 상징적(Symbolic) 표상 순으로 발달합니다.'
+            },
+            {
+                q: '반 힐레(Van Hiele)의 기하 학습 수준 중 "도형의 성질 간 논리적 관계를 파악하고 정사각형이 직사각형에 포함됨을 이해하는 수준"은?',
+                options: ['0수준 (시각적 인식 수준)', '1수준 (분석적 수준)', '2수준 (비형식적 연역 수준)', '3수준 (형식적 연역 수준)'],
+                answer: 2,
+                explanation: '1수준(분석적 수준)에서는 개별 성질을 파악하지만 포함 관계는 이해하지 못하며, 2수준(비형식적 연역 수준)에 도달해야 도형 간의 포함 관계와 성질 간 연역적 연결을 이해합니다.'
+            },
+            {
+                q: '프로이덴탈(Freudenthal)이 비판한 "반교수학적 전도(Anti-didactical Inversion)"의 의미로 가장 적절한 것은?',
+                options: ['구체적 조작 활동을 지나치게 강조하여 추상화를 지연시키는 현상', '수학의 발생 과정인 현상을 생략하고 완성된 형식적 결과를 먼저 가르치는 방식', '학생의 오개념을 교정하지 않고 그대로 방치하는 비구조화된 수업', '교사가 과도한 힌트를 주어 학생의 사고 기회를 박탈하는 현상'],
+                answer: 1,
+                explanation: '프로이덴탈은 인류가 수학을 발명한 역순으로, 완성된 형식적 체계를 먼저 제시하고 응용 문제를 나중에 다루는 전통적 방식을 반교수학적 전도라 비판했습니다.'
+            },
+            {
+                q: '쇤펠드(Schoenfeld)가 폴리아의 문제해결 이론을 확장하며 추가한 4가지 요인에 해당하지 않는 것은?',
+                options: ['인지적 자원 (Resources)', '통제 / 메타인지 (Control)', '신념 체계 (Belief Systems)', '제도화 (Institutionalization)'],
+                answer: 3,
+                explanation: '쇤펠드의 4가지 요인은 인지적 자원, 발견술, 통제(메타인지), 신념 체계입니다. "제도화"는 브루소의 교수학적 상황론의 마지막 단계입니다.'
+            },
+            {
+                q: '자연수 곱셈에서 형성된 "곱하면 항상 값이 커진다"는 믿음이 소수·분수 곱셈(예: 4 × 0.5) 학습을 방해하는 현상을 설명하는 개념은?',
+                options: ['인식론적 장애 (Epistemological Obstacle)', '쥬르댕 효과 (Jourdain Effect)', '닫힘의 욕구 (Lack of Closure)', '동등 가능성 편향'],
+                answer: 0,
+                explanation: '특정 맥락(자연수)에서 성공적이었던 선행 지식이 확장된 새로운 맥락(유리수)에서 부적절하게 작용하여 학습을 저해하는 현상은 바슐라르와 브루소가 제시한 인식론적 장애입니다.'
+            },
+            {
+                q: '딘즈(Dienes)의 수학 학습 원리 중 "하나의 수학적 개념을 다양한 외형적 교구나 상황으로 제시해야 한다"는 원리는?',
+                options: ['역동적 원리', '구성적 원리', '지각적 다양성의 원리', '수학적 다양성의 원리'],
+                answer: 2,
+                explanation: '지각적 다양성의 원리는 개념의 수학적 구조는 유지한 채 외형적·시각적 표현(교구, 색깔, 크기 등)을 다양화하여 본질적 구조를 추상화하도록 돕는 원리입니다.'
+            },
+            {
+                q: '학생들이 시간-거리 그래프의 기울어진 선분을 보고 "사람이 언덕을 올라가고 있다"고 해석하는 대표적 함수 오개념은?',
+                options: ['그래프를 그림으로 해석 (Graph-as-Picture)', '결과 접근법 (Outcome Approach)', '전형적 방향성 고착', '닫힘의 욕구'],
+                answer: 0,
+                explanation: '그래프의 추상적 변수 관계를 실제 물리적 경로의 그림(언덕, 궤적)과 혼동하는 현상을 "그래프를 그림으로 해석(Graph-as-Picture)" 오류라고 합니다.'
+            },
+            {
+                q: '동전을 5번 던져 모두 앞면이 나왔을 때, "다음 6번째 시행에서는 반드시 뒷면이 나올 확률이 높다"고 생각하는 확률 오개념은?',
+                options: ['동등 가능성 편향', '도박사의 오류 (대표성 휴리스틱)', '인식론적 전도', '통계적 변이성 무시'],
+                answer: 1,
+                explanation: '독립시행임에도 불구하고 짧은 표본에서도 전체 확률 비율(50:50)이 즉각 회복되어야 한다고 믿는 대표성 휴리스틱의 전형적 사례인 도박사의 오류입니다.'
+            }
+        ];
+
+        let currentQuizIdx = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        function loadQuizQuestion() {
+            const qItem = quizData[currentQuizIdx];
+            quizAnswered = false;
+
+            document.getElementById('quizProgressLabel').textContent = `문제 ${currentQuizIdx + 1} / ${quizData.length}`;
+            document.getElementById('quizScoreLabel').textContent = `현재 점수: ${quizScore}점`;
+            document.getElementById('quizQuestion').textContent = qItem.q;
+            document.getElementById('quizFeedback').classList.add('hidden');
+            document.getElementById('nextQuizBtn').classList.add('hidden');
+
+            const optionsBox = document.getElementById('quizOptions');
+            optionsBox.innerHTML = '';
+
+            qItem.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-indigo-500 hover:bg-indigo-50/40 dark:hover:bg-slate-800 text-xs sm:text-sm font-medium transition-all flex items-center gap-3';
+                btn.innerHTML = `<span class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xs font-bold shrink-0">${idx + 1}</span><span>${opt}</span>`;
+                btn.onclick = () => selectQuizOption(idx, btn);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function selectQuizOption(selectedIdx, btnEl) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const qItem = quizData[currentQuizIdx];
+            const isCorrect = selectedIdx === qItem.answer;
+            const allBtns = document.getElementById('quizOptions').querySelectorAll('button');
+
+            allBtns.forEach((b, idx) => {
+                b.disabled = true;
+                if (idx === qItem.answer) {
+                    b.classList.add('border-emerald-500', 'bg-emerald-50', 'dark:bg-emerald-950/40', 'text-emerald-800', 'dark:text-emerald-200');
+                } else if (idx === selectedIdx && !isCorrect) {
+                    b.classList.add('border-rose-500', 'bg-rose-50', 'dark:bg-rose-950/40', 'text-rose-800', 'dark:text-rose-200');
+                }
+            });
+
+            const feedbackBox = document.getElementById('quizFeedback');
+            feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-800', 'bg-rose-50', 'text-rose-800', 'dark:bg-emerald-950/40', 'dark:text-emerald-200', 'dark:bg-rose-950/40', 'dark:text-rose-200');
+
+            if (isCorrect) {
+                quizScore++;
+                document.getElementById('quizScoreLabel').textContent = `현재 점수: ${quizScore}점`;
+                feedbackBox.classList.add('bg-emerald-50', 'dark:bg-emerald-950/40', 'text-emerald-800', 'dark:text-emerald-200', 'border', 'border-emerald-200', 'dark:border-emerald-800');
+                feedbackBox.innerHTML = `<strong><i class="fa-solid fa-circle-check mr-1"></i>정답입니다!</strong> ${qItem.explanation}`;
+            } else {
+                feedbackBox.classList.add('bg-rose-50', 'dark:bg-rose-950/40', 'text-rose-800', 'dark:text-rose-200', 'border', 'border-rose-200', 'dark:border-rose-800');
+                feedbackBox.innerHTML = `<strong><i class="fa-solid fa-circle-xmark mr-1"></i>오답입니다.</strong> ${qItem.explanation}`;
+            }
+
+            const nextBtn = document.getElementById('nextQuizBtn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.innerHTML = currentQuizIdx === quizData.length - 1 ? '결과 확인하기 <i class="fa-solid fa-flag-checkered ml-1"></i>' : '다음 문제 <i class="fa-solid fa-arrow-right ml-1"></i>';
+        }
+
+        function nextQuizQuestion() {
+            if (currentQuizIdx < quizData.length - 1) {
+                currentQuizIdx++;
+                loadQuizQuestion();
+            } else {
+                document.getElementById('quizActiveView').classList.add('hidden');
+                document.getElementById('quizResultView').classList.remove('hidden');
+                document.getElementById('finalScoreText').textContent = `총 ${quizData.length}문제 중 ${quizScore}문제를 맞혔습니다. (정답률: ${Math.round((quizScore / quizData.length) * 100)}%)`;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuizIdx = 0;
+            quizScore = 0;
+            document.getElementById('quizResultView').classList.add('hidden');
+            document.getElementById('quizActiveView').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+    </script>
+</body>
+</html>
